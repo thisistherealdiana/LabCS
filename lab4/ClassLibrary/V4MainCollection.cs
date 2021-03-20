@@ -208,6 +208,7 @@ namespace ClassLibrary
             Add(forth);
             Add(fifth);
             Add(sixth);
+            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
 
         public override string ToString()

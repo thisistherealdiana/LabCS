@@ -75,7 +75,7 @@
 
 
         <TextBlock Grid.Column="0" Grid.Row="1" Margin="10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" 
-                   Text="{Binding Path=max_complex}"/>
+                   Text="{Binding max_complex, UpdateSourceTrigger=PropertyChanged}"/>
         <!--Максимальный модуль среди всех результатов измерений в коллекции V4MainCollection: -->
     </Grid>
 </Window>

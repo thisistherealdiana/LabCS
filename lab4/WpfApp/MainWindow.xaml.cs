@@ -81,7 +81,7 @@ namespace WpfApp
                 if (dlg.ShowDialog() == true)
                 {
                     string filename = dlg.FileName;
-                    V4MC = Load(filename);
+                    V4MC = V4MC.Load(filename);
                 }
             }
         }
@@ -147,7 +147,6 @@ namespace WpfApp
 
         private void Remove_Click(object sender, RoutedEventArgs e)
         {
-            //listBox_Main.Items.Remove(listBox_Main.Items[listBox_Main.SelectedIndex]);
             if (listBox_Main.SelectedItem.GetType().Name == "V4DataOnGrid")
             {
                 V4DataOnGrid item = (V4DataOnGrid)listBox_Main.SelectedItem;
@@ -183,7 +182,7 @@ namespace WpfApp
 
         private void Window_Closed(object sender, EventArgs e)
         {
-            if (V4MC.ChangesWereMade == true)
+            if (V4MC.ChangesWereMade != false)
             {
                 MessageBoxResult res = MessageBox.Show("Данные могут быть потеряны. Продолжить?\nНажмите \"Да\", если желаете продолжить без сохранения.\n" +
                                                         "Нажмите \"Нет\", если хотите сохранить текущие данные в файле.", "", MessageBoxButton.YesNoCancel);
