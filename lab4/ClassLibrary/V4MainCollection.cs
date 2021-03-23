@@ -60,7 +60,7 @@ namespace ClassLibrary
                 fileStream = File.Create(filename);
                 BinaryFormatter binaryFormatter = new BinaryFormatter();
                 binaryFormatter.Serialize(fileStream, this);
-                //ChangesWereMade = false;
+                ChangesWereMade = false;
             }
             catch(Exception ex)
             {
@@ -107,7 +107,7 @@ namespace ClassLibrary
             V4MainCollection sender_ = (V4MainCollection)sender;
             sender_.ChangesWereMade = true;
 
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("textblock"));
+            if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs("textblock"));
         }
 
         void HandlePropertyChanged(object sender, PropertyChangedEventArgs args)
@@ -131,7 +131,7 @@ namespace ClassLibrary
                 //list[index].PropertyChanged += HandlePropertyChanged;
                 //OnDataChanged(ChangeInfo.Replace, list.Count);
                 
-                CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+                if (CollectionChanged != null) CollectionChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset)); 
             }
         }
 
@@ -157,7 +157,7 @@ namespace ClassLibrary
             //item.PropertyChanged += HandlePropertyChanged;
             //OnDataChanged(ChangeInfo.Add, list.Count);
 
-            CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            if (CollectionChanged != null) CollectionChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
 
         public bool Remove(string id, double w)
@@ -173,7 +173,7 @@ namespace ClassLibrary
                     i--;
                     res = true;
 
-                    CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+                    if (CollectionChanged != null) CollectionChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
                 }
             }
             return res;
@@ -192,7 +192,7 @@ namespace ClassLibrary
                     i--;
                     res = true;
 
-                    CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+                    if (CollectionChanged != null) CollectionChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
                 }
             }
             return res;
@@ -227,8 +227,7 @@ namespace ClassLibrary
             Add(forth);
             Add(fifth);
             Add(sixth);
-
-            CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            if (CollectionChanged != null) CollectionChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
 
         public override string ToString()
@@ -282,7 +281,6 @@ namespace ClassLibrary
         {
             get
             {
-                //if (list.Count == 0) return -1000;
                 return list.SelectMany(x => x).OrderByDescending(v => v.compl.Magnitude).FirstOrDefault().compl;
             }
         }
