@@ -116,7 +116,8 @@ namespace ClassLibrary
 
         public override string ToString()
         {
-            return $"V4DataOnGrid: info={Info}; frequency={Frequency}; step_x={grid.step_x}; step_y={grid.step_y}; num_x={grid.num_x}; num_y={grid.num_y}";
+            //return $"V4DataOnGrid: info={Info}; frequency={Frequency}; step_x={grid.step_x}; step_y={grid.step_y}; num_x={grid.num_x}; num_y={grid.num_y}";
+            return $"V4DataOnGrid: info={Info}; frequency={Frequency}\n                         step_x={grid.step_x}; step_y={grid.step_y}\n                         num_x={grid.num_x}; num_y={grid.num_y}";
         }
 
         public override string ToLongString(string format)

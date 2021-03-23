@@ -121,7 +121,8 @@ namespace ClassLibrary
 
         public override string ToString()
         {
-            return $"V4DataCollection: info={Info}; frequency={Frequency}; num of elements in dict = {dict.Count}";
+            return $"V4DataCollection: info={Info};frequency={Frequency}\n                         num of elements in dict={dict.Count}";
+            //            return $"V4DataCollection: info={Info}; frequency={Frequency}; num of elements in dict = {dict.Count}";
         }
 
         public override string ToLongString(string format)

@@ -14,6 +14,7 @@
         <conv:V4dogConverter x:Key="key_v4dog_converter"/>
         <conv:DataItemConverter_1 x:Key="key_dataitem_converter_1"/>
         <conv:DataItemConverter_2 x:Key="key_dataitem_converter_2"/>
+        <conv:MaxAbsConverter x:Key="key_max_abs_converter"/>
         <CollectionViewSource Source="{Binding}"
                               x:Key="key_view_DataCollection" Filter="FilterByV4DataCollection"/>
         <CollectionViewSource Source="{Binding}"
@@ -75,7 +76,7 @@
 
 
         <TextBlock Grid.Column="0" Grid.Row="1" Margin="10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" 
-                   Text="{Binding max_complex, UpdateSourceTrigger=PropertyChanged}"/>
-        <!--Максимальный модуль среди всех результатов измерений в коллекции V4MainCollection: -->
+                   Text="{Binding Path=max_complex, Converter={StaticResource key_max_abs_converter}}"/>
+        <!--Максимальный модуль среди всех результатов измерений в коллекции V4MainCollection:      UpdateSourceTrigger=PropertyChanged, -->
     </Grid>
 </Window>

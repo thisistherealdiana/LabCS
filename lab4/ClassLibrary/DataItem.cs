@@ -1,6 +1,9 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
+
 namespace ClassLibrary
 {
+    [Serializable]
     public struct DataItem
     {
         public Vector2 vect { get; set; }

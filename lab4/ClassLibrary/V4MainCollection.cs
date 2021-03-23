@@ -29,6 +29,7 @@ namespace ClassLibrary
             return $"Data changed due to: {info}\nAmount of elements: {num}";
         }
     }
+    public delegate void DataChangedEventHandler(object source, DataChangedEventArgs args);
 
     [Serializable]
     public class V4MainCollection : IEnumerable<V4Data>, INotifyCollectionChanged, INotifyPropertyChanged
@@ -37,16 +38,20 @@ namespace ClassLibrary
         public event DataChangedEventHandler DataChanged;
         [field:NonSerialized]
         public event NotifyCollectionChangedEventHandler CollectionChanged;
+        [field: NonSerialized]
         public event PropertyChangedEventHandler PropertyChanged;
 
+        List<V4Data> list { get; set; }
+
+        public V4MainCollection()
+        {
+            list = new List<V4Data>();
+            ChangesWereMade = true;
+            CollectionChanged += V4MainCollection_CollectionChanged;
+        }
 
         public bool ChangesWereMade { get; set; }
 
-        private void OnCollectionChanged(NotifyCollectionChangedEventArgs args)
-        {
-            if (CollectionChanged != null)
-                CollectionChanged(this, args);
-        }
         public void Save(string filename)
         {
             FileStream fileStream = null;
@@ -54,8 +59,8 @@ namespace ClassLibrary
             {
                 fileStream = File.Create(filename);
                 BinaryFormatter binaryFormatter = new BinaryFormatter();
-                binaryFormatter.Serialize(fileStream, list);
-                ChangesWereMade = false;
+                binaryFormatter.Serialize(fileStream, this);
+                //ChangesWereMade = false;
             }
             catch(Exception ex)
             {
@@ -70,7 +75,7 @@ namespace ClassLibrary
             }
         }
 
-        public V4MainCollection Load(string filename)
+        public static V4MainCollection Load(string filename)
         {
             FileStream fileStream = null;
             V4MainCollection res = null;
@@ -95,19 +100,14 @@ namespace ClassLibrary
             return res;
         }
 
-        public delegate void DataChangedEventHandler(object source, DataChangedEventArgs args);
-
-        List<V4Data> list { get; set; }
-
-        public V4MainCollection()
-        {
-            list = new List<V4Data>();
-            CollectionChanged += V4MainCollection_CollectionChanged;
-        }
+        
 
         private void V4MainCollection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            ChangesWereMade = true;
+            V4MainCollection sender_ = (V4MainCollection)sender;
+            sender_.ChangesWereMade = true;
+
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("textblock"));
         }
 
         void HandlePropertyChanged(object sender, PropertyChangedEventArgs args)
@@ -126,15 +126,14 @@ namespace ClassLibrary
             get => list[index];
             set
             {
-                list[index].PropertyChanged -= HandlePropertyChanged;
+                //list[index].PropertyChanged -= HandlePropertyChanged;
                 list[index] = value;
-                list[index].PropertyChanged += HandlePropertyChanged;
-                OnDataChanged(ChangeInfo.Replace, list.Count);
-
-                OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+                //list[index].PropertyChanged += HandlePropertyChanged;
+                //OnDataChanged(ChangeInfo.Replace, list.Count);
+                
+                CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
             }
         }
-
 
         public IEnumerator<V4Data> GetEnumerator()
         {
@@ -154,10 +153,11 @@ namespace ClassLibrary
         public void Add(V4Data item)
         {
             list.Add(item);
-            list[Count-1].PropertyChanged += HandlePropertyChanged;
-            OnDataChanged(ChangeInfo.Add, list.Count);
+            //list[Count-1].PropertyChanged += HandlePropertyChanged;
+            //item.PropertyChanged += HandlePropertyChanged;
+            //OnDataChanged(ChangeInfo.Add, list.Count);
 
-            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
 
         public bool Remove(string id, double w)
@@ -167,13 +167,32 @@ namespace ClassLibrary
             {
                 if ((list[i].Info == id) && (list[i].Frequency == w))
                 {
-                    list[i].PropertyChanged -= HandlePropertyChanged;
+                    //list[i].PropertyChanged -= HandlePropertyChanged;
                     list.RemoveAt(i);
-                    OnDataChanged(ChangeInfo.Remove, list.Count);
+                    //OnDataChanged(ChangeInfo.Remove, list.Count);
                     i--;
                     res = true;
 
-                    OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+                    CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+                }
+            }
+            return res;
+        }
+
+        public bool Remove2(V4Data item)
+        {
+            bool res = false;
+            for (int i = 0; i < list.Count; i++)
+            {
+                if (list[i] == item)
+                {
+                    //list[i].PropertyChanged -= HandlePropertyChanged;
+                    list.RemoveAt(i);
+                    //OnDataChanged(ChangeInfo.Remove, list.Count);
+                    i--;
+                    res = true;
+
+                    CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
                 }
             }
             return res;
@@ -208,7 +227,8 @@ namespace ClassLibrary
             Add(forth);
             Add(fifth);
             Add(sixth);
-            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+
+            CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
 
         public override string ToString()
@@ -262,8 +282,8 @@ namespace ClassLibrary
         {
             get
             {
-                if (list.Count == 0) return 0;
-                return list.SelectMany(x => x).OrderByDescending(v => v.compl.Magnitude).First().compl;
+                //if (list.Count == 0) return -1000;
+                return list.SelectMany(x => x).OrderByDescending(v => v.compl.Magnitude).FirstOrDefault().compl;
             }
         }
     }
