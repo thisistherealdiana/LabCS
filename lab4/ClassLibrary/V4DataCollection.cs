@@ -183,10 +183,6 @@ namespace ClassLibrary
                 }
                 sr.Close();
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine("EXCEPTION: " + ex.Message);
-            }
             finally
             {
                 if (fs != null) fs.Close();

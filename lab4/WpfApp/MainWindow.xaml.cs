@@ -90,7 +90,6 @@ namespace WpfApp
                     {
                         string filename = dlg.FileName;
                         V4MC = V4MainCollection.Load(filename);
-                        DataContext = null;
                         DataContext = V4MC;
                         V4MC.ChangesWereMade = true;
                     }
@@ -124,8 +123,6 @@ namespace WpfApp
         private void Add_Defaults_Click(object sender, RoutedEventArgs e)
         {
             V4MC.AddDefaults();
-            DataContext = null;
-            DataContext = V4MC;
         }
 
         private void Add_Default_V4DataCollection_Click(object sender, RoutedEventArgs e)
@@ -133,44 +130,38 @@ namespace WpfApp
             V4DataCollection item = new V4DataCollection("random V4DC", 9d);
             item.InitRandom(5, 4, 4, 0, 9);
             V4MC.Add(item);
-            DataContext = null;
-            DataContext = V4MC;
         }
 
         private void Add_Default_V4DataOnGrid_Click(object sender, RoutedEventArgs e)
         {
-            //Grid2D gr = new Grid2D();
             Grid2D gr = new Grid2D(1,2,3,5);
 
             V4DataOnGrid item = new V4DataOnGrid("random V4DOG", 8d, gr);
             item.InitRandom(1, 9);
             V4MC.Add(item);
-            DataContext = null;
-            DataContext = V4MC;
         }
 
         private void Add_Element_from_File_Click(object sender, RoutedEventArgs e)
         {
             Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
-            if (dlg.ShowDialog() == true)
+            try
             {
-                string filename = dlg.FileName;
-                V4DataCollection item = new V4DataCollection(filename);
-                V4MC.Add(item);
-                DataContext = null;
-                DataContext = V4MC;
+                if (dlg.ShowDialog() == true)
+                {
+                    string filename = dlg.FileName;
+                    V4DataCollection item = new V4DataCollection(filename);
+                    V4MC.Add(item);
+                }
             }
-            else
+            catch (Exception exception)
             {
-                MessageBox.Show("Произошла ошибка при чтении из файла.");
+                MessageBox.Show(exception.Message);
             }
         }
 
         private void Remove_Click(object sender, RoutedEventArgs e)
         {
             V4MC.Remove2((V4Data)listBox_Main.SelectedItem);
-            DataContext = null;
-            DataContext = V4MC;
         }
 
         private void FilterByV4DataOnFrid(object sender, FilterEventArgs args)
