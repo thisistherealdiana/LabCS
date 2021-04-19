@@ -271,8 +271,11 @@ namespace WpfApp
         private void CanSaveCommandHandler(object sender, CanExecuteRoutedEventArgs e)
         {
             if (V4MC.ChangesWereMade == true)
+            {
                 e.CanExecute = true;
-            else e.CanExecute = false;
+                return;
+            }
+            e.CanExecute = false;
         }
 
         private void RemoveCommandHandler(object sender, ExecutedRoutedEventArgs e)
