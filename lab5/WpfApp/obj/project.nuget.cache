@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "SM/feH5rQsq3hzwibV7XKj6HH6xgKv3+SQXRp9AAQooCAl7Q3KOiAMa8px/pMtwyZpNEzXSsFPDt0tXUm18qQw==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Lenovo\\Desktop\\lab5\\WpfApp\\WpfApp.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Lenovo\\.nuget\\packages\\system.numerics.vectors\\4.5.0\\system.numerics.vectors.4.5.0.nupkg.sha512"
+  ],
+  "logs": []
+}
